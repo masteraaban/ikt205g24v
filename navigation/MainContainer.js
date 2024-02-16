@@ -32,14 +32,14 @@ function MainContainer() {
               iconName = focused ? 'list' : 'list-outline';
 
             } else if (rn === studentName) {
-              iconName = focused ? 'settings' : 'settings-outline';
+              iconName = focused ? 'settings' : 'person-outline';
             }
 
             return <Ionicons name={iconName} size={size} color={color} />;
           },
         })}
         tabBarOptions={{
-          activeTintColor: 'tomato',
+          activeTintColor: 'light-blue',
           inactiveTintColor: 'grey',
           labelStyle: { paddingBottom: 10, fontSize: 10 },
           style: { padding: 10, height: 70}
