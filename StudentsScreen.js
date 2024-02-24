@@ -1,60 +1,97 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, Button } from 'react-native';
-import { doc, getDoc } from 'firebase/firestore';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, Button } from 'react-native';
+import { getDocs, collection, onSnapshot, deleteDoc, doc } from 'firebase/firestore';
 import { db } from './firebaseConfig';
 
-export default function StudentsScreen({ navigation }) {
-    const [studentInfo, setStudentInfo] = useState(null);
+const StudentsScreen = ({ navigation }) => {
+    const [students, setStudents] = useState([]);
 
     useEffect(() => {
-        const fetchStudentData = async () => {
+        const fetchData = async () => {
             try {
-                const studentId = 'FciOxHLf9WKxtUwUa5aH';
-                const docRef = doc(db, 'students', studentId);
-                const docSnap = await getDoc(docRef);
-
-                if (docSnap.exists()) {
-                    const data = docSnap.data();
-                    setStudentInfo({
-                        dob: data.DOB,
-                        fName: data.fName,
-                        lName: data.lName,
-                    });
-                } else {
-                    console.log('No such document for student with ID:', studentId);
-                }
+                const snapshot = await getDocs(collection(db, 'students'));
+                const studentList = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                setStudents(studentList);
             } catch (error) {
-                console.error('Error fetching student data:', error);
+                console.error('Error fetching students:', error);
             }
         };
 
-        fetchStudentData();
+        const unsubscribe = onSnapshot(collection(db, 'students'), fetchData);
+
+        return () => {
+            unsubscribe();
+        };
     }, []);
 
-
-    const stringifyValue = (value) => {
-        if (typeof value === 'object' && value !== null) {
-            return JSON.stringify(value);
+    const handleDeleteStudent = async (studentId) => {
+        try {
+            await deleteDoc(doc(db, 'students', studentId));
+        } catch (error) {
+            console.error('Error deleting student:', error);
         }
-        return value;
     };
 
-    // Function to convert object to array of key-value pairs
-    const objectToArray = (obj) => {
-        return Object.entries(obj).map(([key, value]) => ({ key, value }));
+    const handleAddStudent = () => {
+        navigation.navigate('AddStudentForm');
     };
 
     return (
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-            <Text style={{ fontSize: 26, fontWeight: 'bold', marginBottom: 20 }}>Student Information</Text>
-            {studentInfo ? (
-                objectToArray(studentInfo).map(({ key, value }) => (
-                    <Text key={key}>{key}: {stringifyValue(value)}</Text>
-                ))
-            ) : (
-                <Text>Loading...</Text>
-            )}
-            <Button title="Go to Home" onPress={() => navigation.navigate('Home')} />
+        <View style={styles.container}>
+            <View style={styles.tableHeader}>
+                <Text style={styles.headerText}>First Name</Text>
+                <Text style={styles.headerText}>Last Name</Text>
+                <Text style={styles.headerText}>Date of Birth</Text>
+            </View>
+            {/* Display student data */}
+            {students.map((student, index) => (
+                <View key={index} style={styles.studentRow}>
+                    <Text style={styles.studentData}>{student.firstName}</Text>
+                    <Text style={styles.studentData}>{student.lastName}</Text>
+                    <Text style={styles.studentData}>{student.dob}</Text>
+                    <Button title="Delete" onPress={() => handleDeleteStudent(student.id)} />
+                </View>
+            ))}
+            {/* Navigation buttons */}
+            <View style={styles.buttonContainer}>
+                <Button title="Add Student" onPress={handleAddStudent} />
+                <Button title="Go to Home" onPress={() => navigation.navigate('Home')} />
+            </View>
         </View>
     );
-}
+};
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        paddingHorizontal: 20,
+        paddingVertical: 10,
+        backgroundColor: '#fff',
+    },
+    tableHeader: {
+        flexDirection: 'row',
+        borderBottomWidth: 1,
+        borderBottomColor: '#000',
+        paddingBottom: 10,
+    },
+    headerText: {
+        flex: 1,
+        fontWeight: 'bold',
+    },
+    studentRow: {
+        flexDirection: 'row',
+        borderBottomWidth: 1,
+        borderBottomColor: '#ccc',
+        paddingVertical: 10,
+    },
+    studentData: {
+        flex: 1,
+    },
+    buttonContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginTop: 20,
+    },
+});
+
+export default StudentsScreen;
