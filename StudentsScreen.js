@@ -34,11 +34,10 @@ const StudentsScreen = ({ navigation }) => {
 
     const handleEditStudent = async (studentId) => {
         try {
-            await deleteDoc(doc(db, 'students', studentId));
+            navigation.navigate('EditStudentForm', { studentId });
         } catch (error) {
-            console.error('Error deleting student:', error);
+            console.error('Error navigating to edit form:', error);
         }
-        navigation.navigate('EditStudentForm');
     };
 
     const handleAddStudent = () => {

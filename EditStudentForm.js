@@ -1,15 +1,38 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
-import { addDoc, collection } from 'firebase/firestore';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native';
+import { addDoc, collection, deleteDoc, doc, getDoc } from 'firebase/firestore';
 import { db } from './firebaseConfig';
 
-const EditStudentForm = ({ navigation }) => {
+const EditStudentForm = ({ navigation, route }) => {
+    const { studentId } = route.params;
+
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [dob, setDob] = useState('');
 
+    useEffect(() => {
+        const fetchStudentDetails = async () => {
+            try {
+                const studentDoc = await getDoc(doc(db, 'students', studentId));
+                if (studentDoc.exists()) {
+                    const studentData = studentDoc.data();
+                    setFirstName(studentData.firstName);
+                    setLastName(studentData.lastName);
+                    setDob(studentData.dob);
+                } else {
+                    console.error('Student not found!');
+                }
+            } catch (error) {
+                console.error('Error fetching student details:', error);
+            }
+        };
+
+        fetchStudentDetails();
+    }, [studentId]);
+
     const handleEditStudent = async () => {
         try {
+            await deleteDoc(doc(db, 'students', studentId));
             const studentsRef = collection(db, 'students');
             await addDoc(studentsRef, { firstName, lastName, dob });
             console.log('Student edited successfully!');
