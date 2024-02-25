@@ -1,22 +1,45 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
-import { updateDoc, doc } from 'firebase/firestore';
+import { addDoc, collection } from 'firebase/firestore';
 import { db } from './firebaseConfig';
 
-const EditStudentForm = ({ route, navigation }) => {
+const EditStudentForm = ({ navigation }) => {
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
+    const [dob, setDob] = useState('');
 
+    const handleEditStudent = async () => {
+        try {
+            const studentsRef = collection(db, 'students');
+            await addDoc(studentsRef, { firstName, lastName, dob });
+            console.log('Student edited successfully!');
+            navigation.goBack();
+        } catch (error) {
+            console.error('Error editing student:', error);
+        }
+    };
 
     return (
         <View style={styles.container}>
-
-            {/* Form elements to edit student's information */}
             <Text style={styles.label}>First Name:</Text>
-
+            <TextInput
+                style={styles.input}
+                value={firstName}
+                onChangeText={text => setFirstName(text)}
+            />
             <Text style={styles.label}>Last Name:</Text>
-
+            <TextInput
+                style={styles.input}
+                value={lastName}
+                onChangeText={text => setLastName(text)}
+            />
             <Text style={styles.label}>Date of Birth:</Text>
-            
-
+            <TextInput
+                style={styles.input}
+                value={dob}
+                onChangeText={text => setDob(text)}
+            />
+            <Button title="Save Changes" onPress={handleEditStudent} />
         </View>
     );
 };

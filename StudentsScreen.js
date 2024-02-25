@@ -32,6 +32,15 @@ const StudentsScreen = ({ navigation }) => {
         }
     };
 
+    const handleEditStudent = async (studentId) => {
+        try {
+            await deleteDoc(doc(db, 'students', studentId));
+        } catch (error) {
+            console.error('Error deleting student:', error);
+        }
+        navigation.navigate('EditStudentForm');
+    };
+
     const handleAddStudent = () => {
         navigation.navigate('AddStudentForm');
     };
@@ -49,6 +58,7 @@ const StudentsScreen = ({ navigation }) => {
                     <Text style={styles.studentData}>{student.firstName}</Text>
                     <Text style={styles.studentData}>{student.lastName}</Text>
                     <Text style={styles.studentData}>{student.dob}</Text>
+                    <Button title="Edit" onPress={() => handleEditStudent(student.id)} />
                     <Button title="Delete" onPress={() => handleDeleteStudent(student.id)} />
                 </View>
             ))}
