@@ -2,19 +2,22 @@ import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+
+
 
 // Screens
-import HomeScreen from './screens/HomeScreen';
 import ResultsScreen from './screens/ResultsScreen';
 import StudentsScreen from '../StudentsScreen';
 import AddStudentForm from '../AddStudentForm';
 import EditStudentForm from '../EditStudentForm';
+import ClassScreen from "./screens/ClassScreen";
 
 // Screen names
-const homeName = "Home";
+const className = "Classes";
 const resultsName = "Results";
 const studentName = "Students";
+
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -23,23 +26,24 @@ function MainContainer() {
   return (
       <NavigationContainer>
         <Tab.Navigator
-            initialRouteName={homeName}
+            initialRouteName={className}
             screenOptions={({ route }) => ({
               tabBarIcon: ({ focused, color, size }) => {
                 let iconName;
                 let rn = route.name;
 
-                if (rn === homeName) {
-                  iconName = focused ? 'home' : 'home-outline';
+                if (rn === className) {
+                  iconName = focused ? 'class' : 'class';
 
                 } else if (rn === resultsName) {
-                  iconName = focused ? 'list' : 'list-outline';
+                  iconName = focused ? 'list' : 'list';
 
                 } else if (rn === studentName) {
-                  iconName = focused ? 'settings' : 'person-outline';
+                  iconName = focused ? 'person' : 'person-outline';
+
                 }
 
-                return <Ionicons name={iconName} size={size} color={color} />;
+                return <Icon name={iconName} size={size} color={color} />;
               },
             })}
             tabBarOptions={{
@@ -49,9 +53,10 @@ function MainContainer() {
               style: { padding: 10, height: 70 }
             }}>
 
-          <Tab.Screen name={homeName} component={HomeScreen} />
-          <Tab.Screen name={resultsName} component={ResultsScreen} />
-          <Tab.Screen name={studentName}>
+          <Tab.Screen name={className} component={ClassScreen} />
+
+            <Tab.Screen name={resultsName} component={ResultsScreen} />
+            <Tab.Screen name={studentName}>
             {() => (
                 <Stack.Navigator initialRouteName="StudentsScreen">
                   <Stack.Screen name="StudentsScreen" component={StudentsScreen} options = {{title: 'Students'}}/>
