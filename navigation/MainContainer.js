@@ -7,7 +7,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 
 
 // Screens
-import ResultsScreen from './screens/ResultsScreen';
+import ResultsScreen from '../ResultsScreen';
 import StudentsScreen from '../StudentsScreen';
 import AddStudentForm from '../AddStudentForm';
 import EditStudentForm from '../EditStudentForm';
