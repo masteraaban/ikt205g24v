@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native';
-import { addDoc, collection, deleteDoc, doc, getDoc } from 'firebase/firestore';
+import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
+import { updateDoc, doc, getDoc } from 'firebase/firestore';
 import { db } from './firebaseConfig';
 
 const EditStudentForm = ({ navigation, route }) => {
@@ -32,9 +32,8 @@ const EditStudentForm = ({ navigation, route }) => {
 
     const handleEditStudent = async () => {
         try {
-            await deleteDoc(doc(db, 'students', studentId));
-            const studentsRef = collection(db, 'students');
-            await addDoc(studentsRef, { firstName, lastName, dob });
+            const studentRef = doc(db, 'students', studentId);
+            await updateDoc(studentRef, { firstName, lastName, dob });
             console.log('Student edited successfully!');
             navigation.goBack();
         } catch (error) {
