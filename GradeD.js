@@ -70,10 +70,14 @@ function GradeD({ navigation, route }) {
                 yAxisSuffix=""
                 yAxisInterval={1} // optional, defaults to 1
                 chartConfig={{
-                    backgroundColor: "#ffffff",
+                    backgroundColor: "rgba(255, 255, 255, 255)",
+                    backgroundGradientFrom: "#ffffff",
+                    backgroundGradientTo: "#ffffff",
+
                     decimalPlaces: 0, // optional, defaults to 2dp
-                    color: (opacity = 0) => `rgba(255, 255, 255, ${opacity})`,
-                    labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                    color: () => `#006400`,
+                    labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+
                     style: {
                         borderRadius: 16
                     },
