@@ -11,7 +11,9 @@ import ResultsScreen from '../ResultsScreen';
 import StudentsScreen from '../StudentsScreen';
 import AddStudentForm from '../AddStudentForm';
 import EditStudentForm from '../EditStudentForm';
-import ClassScreen from "./screens/ClassScreen";
+import ClassScreen from "../ClassScreen";
+import GradeD from "../GradeD"
+import StackNavigator from "@react-navigation/stack/src/navigators/createStackNavigator";
 
 // Screen names
 const className = "Classes";
@@ -53,9 +55,17 @@ function MainContainer() {
               style: { padding: 10, height: 70 }
             }}>
 
-          <Tab.Screen name={className} component={ClassScreen} />
+          <Tab.Screen name={className}>
+              {() => (
+                  <Stack.Navigator initialRouteName="ClassScreen">
+                      <Stack.Screen name={"ClassName"} component={ClassScreen} options = {{title: 'Test'}}  />
+                      <Stack.Screen name={"GradeD"} component={GradeD} options = {{title: 'View Grade D'}} />
+                  </Stack.Navigator>
+              )}
+          </Tab.Screen>
 
             <Tab.Screen name={resultsName} component={ResultsScreen} />
+
             <Tab.Screen name={studentName}>
             {() => (
                 <Stack.Navigator initialRouteName="StudentsScreen">
