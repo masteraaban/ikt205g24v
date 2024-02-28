@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet,   ScrollView,
+} from 'react-native';
 import { collection, query, onSnapshot, getDocs } from 'firebase/firestore';
 import { db } from './firebaseConfig';
 
@@ -40,6 +41,7 @@ const ResultsScreen = ({ navigation }) => {
     }, []);
 
     return (
+        <ScrollView style={styles.scrollView}>
         <View style={styles.container}>
             <View style={styles.tableHeader}>
                 <Text style={[styles.headerText, styles.firstNameColumn]}>First Name</Text>
@@ -61,7 +63,9 @@ const ResultsScreen = ({ navigation }) => {
                 </View>
             ))}
         </View>
-    );
+            </ScrollView>
+
+            );
 };
 
 const styles = StyleSheet.create({
@@ -112,6 +116,15 @@ const styles = StyleSheet.create({
     studentData: {
         textAlign: 'center',
     },
+
+    scrollView: {
+        backgroundColor: 'white',
+        marginHorizontal: 0,
+    },
+    text: {
+        fontSize: 42,
+    },
+
 });
 
 export default ResultsScreen;
