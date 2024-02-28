@@ -71,7 +71,7 @@ function MainContainer() {
                 <Stack.Navigator initialRouteName="StudentsScreen">
                   <Stack.Screen name="StudentsScreen" component={StudentsScreen} options = {{title: 'Students'}}/>
                   <Stack.Screen name="AddStudentForm" component={AddStudentForm} options={{ title: 'Add Student'}}/>
-                    <Stack.Screen name="EditStudentForm" component={EditStudentForm} options={{ title: 'Edit Student'}}/>
+                  <Stack.Screen name="EditStudentForm" component={EditStudentForm} options={{ title: 'Edit Student'}}/>
                 </Stack.Navigator>
             )}
           </Tab.Screen>

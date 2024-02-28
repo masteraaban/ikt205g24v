@@ -18,7 +18,8 @@ function GradeD({ navigation, route }) {
             const resultList = [];
 
             for (const studentDoc of snapshot.docs) {
-                const resultSnapshot = await getDocs(query(collection(studentDoc.ref, "results"), where("classID", "==", classId)));
+                const resultSnapshot =
+                    await getDocs(query(collection(studentDoc.ref, "results"), where("classID", "==", classId)));
                 resultSnapshot.forEach(resultDoc => {
                     resultList.push({ id: resultDoc.id, ...resultDoc.data() });
                 });
@@ -73,7 +74,6 @@ function GradeD({ navigation, route }) {
                     backgroundColor: "rgba(255, 255, 255, 255)",
                     backgroundGradientFrom: "#ffffff",
                     backgroundGradientTo: "#ffffff",
-
                     decimalPlaces: 0, // optional, defaults to 2dp
                     color: () => `#006400`,
                     labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,

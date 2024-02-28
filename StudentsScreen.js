@@ -64,7 +64,7 @@ const StudentsScreen = ({ navigation }) => {
             {/* Navigation buttons */}
             <View style={styles.buttonContainer}>
                 <Button title="Add Student" onPress={handleAddStudent} />
-                <Button title="Go to Home" onPress={() => navigation.navigate('Home')} />
+                <Button title="Go to Home" onPress={() => navigation.navigate('Classes')} />
             </View>
         </View>
     );
